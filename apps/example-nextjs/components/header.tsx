@@ -55,7 +55,7 @@ export default function Header() {
                 className={styles.button}
                 onClick={(e) => {
                   e.preventDefault()
-                  signOut()
+                  void signOut()
                 }}
               >
                 Sign out
@@ -99,6 +99,11 @@ export default function Header() {
           <li className={styles.navItem}>
             <Link href="/me">
               <a>Me</a>
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link href="/siwe">
+              <a>SIWE</a>
             </Link>
           </li>
         </ul>
