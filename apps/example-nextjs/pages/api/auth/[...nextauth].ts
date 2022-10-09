@@ -5,8 +5,11 @@ import GithubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { SiweMessage } from "siwe"
 import { getCsrfToken } from "next-auth/react"
+import { prisma } from "./../../../lib/prismadb"
+import { NextApiRequest, NextApiResponse } from "next"
 // import AppleProvider from "next-auth/providers/apple"
 // import EmailProvider from "next-auth/providers/email"
 
@@ -84,7 +87,7 @@ import { getCsrfToken } from "next-auth/react"
 
 // export default NextAuth(authOptions)
 
-export default async function auth(req: any, res: any) {
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID,
@@ -155,7 +158,7 @@ export default async function auth(req: any, res: any) {
   ]
 
   const isDefaultSigninPage =
-    req.method === "GET" && req.query.nextauth.includes("signin")
+    req.method === "GET" && req.query?.nextauth?.includes("signin")
 
   // Hide Sign-In with Ethereum from default sign page
   if (isDefaultSigninPage) {
@@ -163,6 +166,7 @@ export default async function auth(req: any, res: any) {
   }
 
   return NextAuth(req, res, {
+    adapter: PrismaAdapter(prisma),
     // https://next-auth.js.org/configuration/providers/oauth
     providers,
     session: {
@@ -171,13 +175,17 @@ export default async function auth(req: any, res: any) {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
       async jwt({ token }) {
+        console.log("Session callback ---------")
+        console.log({ token })
         token.userRole = "admin"
         return token
       },
       async session({ session, token }) {
-        session.address = token.sub
+        console.log("Session callback ----------")
+        console.log({ session, token })
+        session.address = token?.sub
         session.user = { ...session.user }
-        session.user.name = token.sub
+        session.user.name = token?.sub
         return session
       },
     },

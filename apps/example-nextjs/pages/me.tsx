@@ -3,6 +3,7 @@ import Layout from "../components/layout"
 
 export default function MePage() {
   const { data } = useSession()
+  console.log("DATAAAAA", data);
 
   return (
     <Layout>
