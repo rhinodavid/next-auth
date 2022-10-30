@@ -47,9 +47,7 @@ export async function handler(
   }
 }
 
-export function createCSRF() {
-  const secret = "secret"
-  const value = "csrf"
+export function createCSRF(value: string = "csrf", secret: string = "secret") {
   const token = createHash("sha256").update(`${value}${secret}`).digest("hex")
 
   return {

@@ -15,6 +15,7 @@ import type { CookieSerializeOptions } from "cookie"
 import type { NextApiRequest, NextApiResponse } from "next"
 
 import type { InternalUrl } from "../utils/parse-url"
+import { EthereumConfig } from "src/providers/ethereum"
 
 export type Awaitable<T> = T | PromiseLike<T>
 
@@ -237,6 +238,7 @@ export interface Account extends Partial<TokenSet> {
    * - oauth: The OAuth account's id, returned from the `profile()` callback.
    * - email: The user's email address.
    * - credentials: `id` returned from the `authorize()` callback
+   * - ethereum: the address verified to have signed the message
    */
   providerAccountId: string
   /** id of the user this account belongs to. */
@@ -498,6 +500,8 @@ export type InternalProvider<T = ProviderType> = (T extends "oauth"
   ? EmailConfig
   : T extends "credentials"
   ? CredentialsConfig
+  : T extends "ethereum"
+  ? EthereumConfig
   : never) & {
   signinUrl: string
   callbackUrl: string

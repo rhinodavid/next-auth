@@ -7,12 +7,13 @@ import type {
   CredentialsProvider,
   CredentialsProviderType,
 } from "./credentials"
+import { EthereumConfig } from "./ethereum"
 
 export * from "./oauth"
 export * from "./email"
 export * from "./credentials"
 
-export type ProviderType = "oauth" | "email" | "credentials"
+export type ProviderType = "oauth" | "email" | "credentials" | "ethereum"
 
 export interface CommonProviderOptions {
   id: string
@@ -21,7 +22,7 @@ export interface CommonProviderOptions {
   options?: Record<string, unknown>
 }
 
-export type Provider = OAuthConfig<any> | EmailConfig | CredentialsConfig
+export type Provider = OAuthConfig<any> | EmailConfig | CredentialsConfig | EthereumConfig
 
 export type BuiltInProviders = Record<OAuthProviderType, OAuthProvider> &
   Record<CredentialsProviderType, CredentialsProvider> &
