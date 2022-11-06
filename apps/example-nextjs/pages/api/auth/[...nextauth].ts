@@ -5,11 +5,13 @@ import GithubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import TwitterProvider from "next-auth/providers/twitter"
 import Auth0Provider from "next-auth/providers/auth0"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { SiweMessage } from "siwe"
 import { getCsrfToken } from "next-auth/react"
-import { prisma } from "./../../../lib/prismadb"
 import { NextApiRequest, NextApiResponse } from "next"
+// import neo4j from "neo4j-driver"
+// import { Neo4jAdapter } from "@next-auth/neo4j-adapter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { prisma } from "../../../lib/prismadb"
 // import AppleProvider from "next-auth/providers/apple"
 // import EmailProvider from "next-auth/providers/email"
 
@@ -86,6 +88,12 @@ import { NextApiRequest, NextApiResponse } from "next"
 // }
 
 // export default NextAuth(authOptions)
+
+// const driver = neo4j.driver(
+//   "bolt://localhost",
+//   neo4j.auth.basic("neo4j", "card-mountain-glass-touch")
+// );
+// const neo4jSession = driver.session();
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   const providers = [
@@ -167,10 +175,11 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
 
   return NextAuth(req, res, {
     adapter: PrismaAdapter(prisma),
+    // adapter: Neo4jAdapter(neo4jSession),
     // https://next-auth.js.org/configuration/providers/oauth
     providers,
     session: {
-      strategy: "jwt",
+      strategy: "database",
     },
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {

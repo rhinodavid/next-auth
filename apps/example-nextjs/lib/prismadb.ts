@@ -9,7 +9,7 @@ declare global {
 console.log("EEEEEEEE", process.env.DATABASE_URL)
 
 export const prisma =
-  global.prisma ||
+  global.prisma ??
   new PrismaClient({
     log: ["query"],
     datasources: {

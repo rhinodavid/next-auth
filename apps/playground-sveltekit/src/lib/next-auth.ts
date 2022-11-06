@@ -125,6 +125,8 @@ export const getServerSession = async (
     options,
   })
 
+  console.log({ session })
+
   const { body } = session
 
   if (body && Object.keys(body).length) {
